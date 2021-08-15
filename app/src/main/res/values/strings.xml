@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Biblioteca</string>
+
+    <string name="pais1">Colombia</string>
+    <string name="pais2">Ecuador</string>
+    <string name="pais3">Perú</string>
+    <string name="pais4">Venezuela</string>
+    <string name="pais5">Chile</string>
+
+    <string-array name="paises">
+        <item>@string/pais1</item>
+        <item>@string/pais2</item>
+        <item>@string/pais3</item>
+        <item>@string/pais4</item>
+        <item>@string/pais5</item>
+    </string-array>
+
+</resources>
