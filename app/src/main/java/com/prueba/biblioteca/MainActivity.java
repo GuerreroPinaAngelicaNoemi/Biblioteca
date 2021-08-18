@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void init(){
+        if(LocalSp.getData(getApplicationContext(), "iniciarconhuella").equals("1")){
+            binding.iniciarConHuella.setChecked(true);
+        }
 
         binding.crearLibro.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AgregarLibroActivity.class)));
         binding.verLibros.setOnClickListener(view ->  startActivity(new Intent(MainActivity.this, ListaLibrosActivity.class)));
@@ -34,6 +37,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.salir.setOnClickListener(view ->  finish());
+
+        binding.iniciarConHuella.setOnClickListener(view -> {
+            if(binding.iniciarConHuella.isChecked()){
+                LocalSp.setData(getApplicationContext(), "iniciarconhuella", "1");
+            }else{
+                LocalSp.setData(getApplicationContext(), "iniciarconhuella", "0");
+            }
+        });
 
     }
 }

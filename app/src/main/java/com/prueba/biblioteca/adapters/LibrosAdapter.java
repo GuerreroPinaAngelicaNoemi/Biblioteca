@@ -18,15 +18,16 @@ import com.prueba.biblioteca.R;
 import com.prueba.biblioteca.room.LibrosDB;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LibrosAdapter extends RecyclerView.Adapter<LibrosAdapter.exViewHolder> {
 
-    private List<LibrosDB> listaLibros;
+    private ArrayList<LibrosDB> listaLibros;
     private OnItemClickListener mListener;
     private ContentResolver contentResolver;
 
-    public LibrosAdapter(List<LibrosDB> listaLibros, ContentResolver contentResolver) {
+    public LibrosAdapter(ArrayList<LibrosDB> listaLibros, ContentResolver contentResolver) {
         this.listaLibros = listaLibros;
         this.contentResolver = contentResolver;
     }

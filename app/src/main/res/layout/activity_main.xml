@@ -24,6 +24,19 @@
         android:layout_margin="10dp"
         android:layout_below="@id/crear_libro"/>
 
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/iniciarConHuella"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Iniciar Con Huella digital"
+        app:switchPadding="8dp"
+        android:textSize="18sp"
+        android:layout_below="@id/ver_libros"
+        android:layout_alignParentEnd="true"
+        />
+
 
    <LinearLayout
        android:layout_width="match_parent"
