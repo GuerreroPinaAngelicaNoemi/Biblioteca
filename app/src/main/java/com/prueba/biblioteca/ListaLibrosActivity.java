@@ -9,6 +9,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -23,13 +25,14 @@ import com.prueba.biblioteca.utils.Alertas;
 import com.prueba.biblioteca.utils.Constantes;
 import com.prueba.biblioteca.utils.DatePickerFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListaLibrosActivity extends AppCompatActivity {
 
     private ActivityListaLibrosBinding binding;
     AppDatabase db;
-    List<LibrosDB> listaLibros;
+    ArrayList<LibrosDB> listaLibros;
 
     private LibrosAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -45,15 +48,34 @@ public class ListaLibrosActivity extends AppCompatActivity {
 
     public void init(){
         db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, Constantes.Database_Name).allowMainThreadQueries().build();
-        listaLibros = db.librosDao().sp_Sel_All();
+        listaLibros = (ArrayList<LibrosDB>) db.librosDao().sp_Sel_All();
 
         cargarLibros(listaLibros);
 
         binding.agregar.setOnClickListener(view -> startActivity(new Intent(ListaLibrosActivity.this, AgregarLibroActivity.class)));
 
+        binding.edSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(listaLibros.size() != 0){
+                    if(!editable.toString().equals("")){
+                        buscarLibro(editable.toString());
+                    }else{
+                        cargarLibros(listaLibros);
+                    }
+                }
+            }
+        });
+
     }
 
-    public void cargarLibros(List<LibrosDB> lista ){
+    public void cargarLibros(ArrayList<LibrosDB> lista ){
 
         binding.recyclerLibros.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -62,13 +84,19 @@ public class ListaLibrosActivity extends AppCompatActivity {
         binding.recyclerLibros.setLayoutManager(mLayoutManager);
         binding.recyclerLibros.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new LibrosAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                editarLibro(ListaLibrosActivity.this, getLayoutInflater(), db, lista.get(position));
-            }
-        });
+        adapter.setOnItemClickListener(position -> editarLibro(ListaLibrosActivity.this, getLayoutInflater(), db, lista.get(position)));
 
+    }
+
+    public void buscarLibro(String nombreLibro){
+        ArrayList<LibrosDB> listaAux = new ArrayList<>();
+
+        for(LibrosDB librosDB : listaLibros){
+            if(librosDB.getNombreLibro().toLowerCase().contains(nombreLibro.toLowerCase())){
+                listaAux.add(librosDB);
+            }
+        }
+        cargarLibros(listaAux);
     }
 
     public void editarLibro(Activity context, LayoutInflater layoutInflater, AppDatabase db, LibrosDB librosDB){
@@ -101,7 +129,7 @@ public class ListaLibrosActivity extends AppCompatActivity {
                     tilfecha.getEditText().getText().toString(), tilGenero.getEditText().getText().toString(), librosDB.getRegion(), librosDB.getImagen());
             db.librosDao().sp_Del_Libro(librosDB);
             db.librosDao().sp_Ins_Book(libroGuardar);
-            listaLibros = db.librosDao().sp_Sel_All();
+            listaLibros = (ArrayList<LibrosDB>) db.librosDao().sp_Sel_All();
             cargarLibros(listaLibros);
             alerEditar.dismiss();
         });

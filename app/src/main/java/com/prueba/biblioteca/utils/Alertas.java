@@ -15,6 +15,7 @@ import com.prueba.biblioteca.room.AppDatabase;
 import com.prueba.biblioteca.room.LibrosDB;
 import com.prueba.biblioteca.room.UsuariosDB;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Alertas {
@@ -67,7 +68,7 @@ public class Alertas {
         eliminar.setOnClickListener(view1 -> {
             db.librosDao().sp_Del_Libro(librosDB);
             db.librosDao().sp_Del_Libro(librosDB);
-            List<LibrosDB> listaLibros = db.librosDao().sp_Sel_All();
+            ArrayList<LibrosDB> listaLibros = (ArrayList<LibrosDB>) db.librosDao().sp_Sel_All();
             context.cargarLibros(listaLibros);
             alertConfirmar.dismiss();
         });
